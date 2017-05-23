@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue">
+
+    <TextView
+        android:id="@+id/app_ver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:textSize="22sp"
+        android:text="@string/VER"
+        android:textStyle="bold|normal"/>
+     
+    <TextView
+         android:id="@+id/BorisRayskiy"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/app_ver"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="42dp"
+         android:text="@string/COPYRIGHT"
+         android:textColor="@color/white"
+         android:textSize="18sp"
+         android:textStyle="bold|italic"/>
+
+     <TextView
+         android:id="@+id/eMail"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/BorisRayskiy"
+         android:layout_centerHorizontal="true"
+         android:autoLink="email"
+         android:text="@string/MAIL"
+         android:textSize="16sp" />
+
+     <TextView
+         android:id="@+id/graphics"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/eMail"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="24dp"
+         android:paddingTop="40sp"
+         android:text="@string/GRAPHICS"
+         android:textColor="@color/white"
+         android:textSize="14sp"
+         android:textStyle="bold|italic"/>
+     
+    <TextView
+        android:id="@+id/graphicsSite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/graphics"
+        android:layout_centerHorizontal="true"
+        android:autoLink="web"
+        android:text="@string/GRAPHICS_SITE"
+        android:textSize="12sp"/>
+
+     <TextView
+        android:id="@+id/testing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/graphicsSite"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20sp"
+        android:text="@string/TESTING"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"/>
+
+    <TextView
+        android:id="@+id/testingNames"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/testing"
+        android:layout_centerHorizontal="true"
+        android:autoLink="web"
+        android:text="@string/TESTING_NAMES"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold|italic"/>
+
+    <TextView
+        android:id="@+id/boascript"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/testingNames"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20sp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:text="@string/BOASCRIPT"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"/>
+    
+    <TextView
+        android:id="@+id/bplot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/boascript"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20sp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:text="@string/BPLOT"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"/>
+    
+</RelativeLayout>

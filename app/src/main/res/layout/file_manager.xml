@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_blue">
+    
+    <TextView
+        android:id="@+id/path"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:textColor="@color/cyan"
+        android:textSize="14sp"/>
+    
+     <View
+         android:id="@+id/separator1"
+         android:layout_width="fill_parent"
+         android:layout_height="2.0dip"
+         android:background="@color/yellow" 
+         android:layout_below="@+id/path"/>
+    
+    <ListView
+        android:id="@+id/filesList"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:layout_below="@+id/separator1"
+        android:layout_above="@+id/separator" />
+
+     <View
+         android:id="@+id/separator"
+         android:layout_width="fill_parent"
+         android:layout_height="2.0dip"
+         android:background="@color/yellow" 
+         android:layout_above="@+id/cancelButton"/>
+    
+     <Button
+         android:id="@+id/cancelButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentRight="true"
+         android:drawableLeft="@drawable/file_cancel"
+         android:minHeight="24dp"
+         android:minWidth="24dp" />
+     
+      <Button
+          android:id="@+id/openButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true"
+          android:layout_toLeftOf="@+id/cancelButton"
+          android:drawableLeft="@drawable/file_open"
+          android:minHeight="24dp"
+          android:minWidth="24dp" />
+    
+    <EditText
+        android:id="@+id/fileName"
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:inputType="textNoSuggestions"
+        android:layout_alignTop="@+id/openButton"
+        android:layout_toLeftOf="@+id/openButton"
+        android:background="@color/white"
+        android:textColor="@color/dark_green"
+        android:hint="@string/FILE_TO_SAVE"
+        android:textSize="14sp"/>
+
+</RelativeLayout>

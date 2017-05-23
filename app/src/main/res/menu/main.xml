@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/ABOUT"
+          android:orderInCategory="100"
+          android:title="@string/ABOUT"/>
+    
+    <item android:id="@+id/SETTINGS"
+          android:orderInCategory="200"
+          android:title="@string/SETTINGS"/>
+    
+    <item android:id="@+id/TEST"
+          android:orderInCategory="300"
+          android:title="@string/TEST"/>
+    
+    <item android:id="@+id/REFERENCE"
+          android:orderInCategory="400"
+          android:title="@string/REFERENCE" android:icon="@drawable/menu_info"/>
+    
+    <item android:id="@+id/EXIT"
+          android:orderInCategory="500"
+          android:title="@string/EXIT"/>
+</menu>

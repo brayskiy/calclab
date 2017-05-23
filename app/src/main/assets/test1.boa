@@ -1,0 +1,279 @@
+println "";
+println "***************************";
+println "****** CALCULATOR TEST ******";
+println "***************************";
+z = 0;
+println "";
+println "Test operator while...";
+x = 2;
+while (x < 100)
+{
+    ++x;
+}
+println x;
+if (x == 100)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}
+
+println " ";    
+println "Test arithmetic...";
+a = 2;
+b = 3;
+c = a + b;
+d = a * b;
+e = a / b;
+f = b % a;
+g = a + b + c + d + e + f;
+println g;
+if (g == 17 + 2 / 3)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}     
+
+println "";
+println "Test sqrt function...";
+a = sqrt(2);
+b = sqrt(sqrt(1)+1);
+c = sqrt(1)+1;
+d = sqrt(2);
+d += 1;
+d *= 2;
+d = d + 1;
+println d;
+if ((d < 5.828428) && (d > 5.828426))
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}       
+
+println "";
+println "Test trigonometrical functions...";
+p=3.1415926;
+q = sin(p);
+r = sin(p/2);
+s = cos(p);
+t = cos(p/2);
+u = q + r + s + t;
+println u;
+if ((u > -0.000001) && (u < 0.000001))
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}      
+
+println "";
+println "Test math functions...";
+a = exp(0);   
+b = exp(1);
+c = log(1);
+d = log(2);
+e = exp(log(1));
+f = exp(log(2));
+g = sqrt(exp(0)+1);
+h = sqrt(sqrt(sqrt(1)));
+i = sqrt(sqrt(sqrt(1)));
+j = sqrt(exp(0) + log(1));
+k = a + b + c + d + e + f + g + h + i + j;
+println k;
+if ((k < 11.825644) && (k > 11.825642))
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}        
+
+
+println "";
+println "Test 'pow' function...";
+a = 2;
+b = 3;
+c = 4;
+d = (a ^ b) ^ c;
+println d;
+if (d == 4096)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}        
+
+println "";
+println "Test 'rand' function...";
+b = rand();
+println b;
+println "Passed";
+
+println "";
+println "Test 'substr' function...";
+s = "Hello";
+p = substr(s, 0, 3);
+if (p == "Hel")
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}
+
+println "";
+println "Test 'replace' function...";
+s = "Hello";
+p = replace(s, "pp", 2, 2);
+println s;
+println p;
+if (p == "Heppo")
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}
+
+
+println "";
+println "Test date function...";
+s = date("mm/dd/yy HH:MM:SS");
+println s;
+println "Passed";
+
+
+println "";        
+println "Test ++/-- operator...";
+a = 2;
+++a;
+++a;
+++a;
+--a;
+--a;
+--a;
+--a;
+if (a == 1)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}        
+
+println "";
+println "Test operation-assign section...";
+g = 2;
+g += 5;
+g -= 4;
+g *= 3;
+g += 1;
+g /= 5;
+if (g == 2)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}        
+
+println "";
+println "Test bit operations...";
+a = 1;
+b = 3;
+c = a & b;
+println c;
+if (c == 1)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}
+
+println "";
+println "Test << operator...";
+x = 1;
+x = x << 2;
+println x;
+if (x == 4)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}
+
+
+println "";
+println "Test ! operator...";
+x = 0;
+x = !x;
+println x;
+if (x == 1)
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}
+
+
+println "";
+println "Test ? operator...";
+s = (1 < 2) ? "Yes" : "No";
+println s;
+if (s == "Yes")
+{
+    println "Passed";
+}
+else
+{
+    z = 1;
+    println "Failed";
+}
+
+println "";
+println "***************************";
+if (z == 0)
+{
+    println "***** ALL TESTS PASSED *****";
+}
+else
+{
+    println "ERRORS IN TESTS";
+}
+println "**************************";

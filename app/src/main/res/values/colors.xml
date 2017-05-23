@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black"            >#ff000000</color>
+    <color name="white"            >#ffffffff</color>
+    <color name="transparent"      >#00000000</color>
+    <color name="black_transparent">#9f000000</color>
+
+    <color name="dark_blue"        >#ff101040</color>
+    <color name="dark_blue_1"      >#ff0059ed</color>
+    <color name="true_blue"        >#ff0000ff</color>
+    <color name="flash_blue"       >#ff11bbff</color>
+    <color name="light_blue"       >#ff1080c0</color>
+    <color name="light_blue_1"     >#ff00d2ff</color>
+    <color name="blue"             >#ff0000f0</color>
+    <color name="blue_1"           >#ff2591ff</color>
+    <color name="medium_blue"      >#ff105ca9</color>
+    <color name="hyperlink_blue"   >#ff53b2f5</color>
+    <color name="sky"              >#ff52a8ff</color>
+    <color name="selection_blue"   >#ff8888ff</color>
+    <color name="cerulian_blue"    >#ff1bc4f5</color>
+    <color name="dim_blue"         >#ff0a5b77</color>
+    <color name="link_blue"        >#ff52a8ff</color>
+    <color name="selected_blue"    >#ff0098f9</color>
+ 
+    <color name="yellow"           >#ffe0c010</color>
+    <color name="yellow_1"         >#ffffe60f</color>
+
+    <color name="magenta"          >#ffff00ff</color>
+    <color name="magenta_1"        >#fffe269b</color>
+    <color name="dark_magenta"     >#ffdf3e95</color>
+
+    <color name="cyan"             >#ff00ffff</color>
+
+    <color name="red"              >#ffa01020</color>
+    <color name="red_1"            >#ffff0300</color>
+    <color name="true_red"         >#ffff0000</color>
+    <color name="solid_mid_red"    >#ffa00000</color>
+    <color name="flash_red"        >#ffff0000</color>
+    <color name="dark_red"         >#ff800000</color>
+    <color name="downtown_red"     >#ffdb3333</color>
+    <color name="light_red"        >#ffff2f4c</color>
+    <color name="security_red"     >#ffff211e</color>
+
+    <color name="orange"           >#fff06000</color>
+    <color name="orange_1"         >#ffff6b05</color>
+    <color name="pink"             >#fff04040</color>
+
+    <color name="light_green"      >#ff86dd00</color>
+    <color name="light_green_1"    >#ff30c030</color>
+    <color name="green"            >#ff008000</color>
+    <color name="green_1"          >#ff00a000</color>
+    <color name="green_2"          >#ff66a407</color>
+    <color name="true_green"       >#ff00ff00</color>
+    <color name="uptown_green"     >#ff01c605</color>
+    <color name="dark_green"       >#ff004000</color>
+    <color name="dark_army_green"  >#ff093c1b</color>
+    <color name="security_green"   >#ff7eca09</color>
+
+    <color name="amber"            >#ffff9f0f</color>
+    <color name="amber_1"          >#fff09000</color>
+    <color name="honey_amber"      >#ffff9f0f</color>
+    <color name="dark_amber"       >#ffa26100</color>
+    <color name="light_amber"      >#ffffd373</color>
+
+    <color name="beige"            >#ffffdead</color>
+
+    <color name="gray"             >#ff909090</color>
+    <color name="dark_grey"        >#ff2e2d2b</color>
+    <color name="solid_dark_gray"  >#ff4c4c4c</color>
+    <color name="casper_grey"      >#ffd8d8d8</color>
+    <color name="smoke_grey"       >#ff4d4d4d</color>
+    <color name="charcoal"         >#ff211f1c</color>
+    <color name="neutral_grey"     >#ffaaaaaa</color>
+    <color name="dark_neutral_grey">#ff2e2e2e</color>
+    <color name="super_grey"       >#ff292c30</color>
+    <color name="submarine"        >#ff535353</color>
+
+    <color name="soot"             >#ff151412</color>
+    <color name="pale_blue"        >#ffa6ecef</color>
+    <color name="purple"           >#ffb22aeb</color>
+    <color name="primary_blue"     >#ff2c7ed0</color>
+    <color name="olive"            >#ff958a0f</color>
+    <color name="off_white"        >#fff2f2f2</color>
+    <color name="sea_blue"         >#ff002244</color>
+    <color name="dusk"             >#ff0053a6</color>
+    <color name="noon"             >#ff0d85fe</color>
+    <color name="midnight"         >#ff0e0c4d</color>
+    <color name="taffy"            >#ffb667ff</color>
+    <color name="pumpkin"          >#ffdf8c0f</color>
+    <color name="gold"             >#ffffde77</color>
+    <color name="grime"            >#ff454545</color>
+    <color name="sapphire"         >#ff4b92fe</color>
+    <color name="mauve"            >#ff4c063c</color>
+   
+    <color name="graph_color_0">#fffd0000</color>
+    <color name="graph_color_1">#ffcb0000</color>
+    <color name="graph_color_2">#ff9a0000</color>
+    <color name="graph_color_3">#ff660000</color>
+    <color name="graph_color_4">#ff380000</color>
+    <color name="graph_color_5">#ff0e3500</color>
+    <color name="graph_color_6">#ff155b03</color>
+    <color name="graph_color_7">#ff1d8206</color>
+    <color name="graph_color_8">#ff25ab09</color>
+    <color name="graph_color_9">#ff2dd20d</color>
+    <color name="graph_color_10">#ff31df0f</color>
+    <color name="graph_color_others">#ff666666</color>
+    
+    <color name="Gray10" >#ff101010</color>
+    <color name="Gray14" >#ff1d1d1d</color>
+    <color name="Gray26" >#ff1a1a1a</color>
+    <color name="Gray27" >#ff1b1b1b</color>
+    <color name="Gray33" >#ff212121</color>
+    <color name="Gray36" >#ff242424</color>
+    <color name="Gray38" >#ff262626</color>
+    <color name="Gray39" >#ff272727</color>
+    <color name="Gray57" >#ff393939</color>
+    <color name="Gray64" >#ff404040</color>
+    <color name="Gray65" >#ff414141</color>
+    <color name="Gray66" >#ff424242</color>
+    <color name="Gray77" >#ff4d4d4d</color>
+    <color name="Gray92" >#ff5c5c5c</color>
+    <color name="Gray125">#ff7d7d7d</color>
+    <color name="Gray144">#ff909090</color>
+    <color name="Gray220">#ffdcdcdc</color>
+    
+</resources>

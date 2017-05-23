@@ -1,0 +1,50 @@
+
+print "";
+print "General string test";
+print "A";
+print "1234567890";
+print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+print "A"=="A";
+print "AAA"=="AAa";
+print "Hello World!";
+print "aaaaaaaaaa">"aaaaaaaaaa";
+print "Test passed";
+
+
+print "";
+print "Test of '>' operation ...";
+print ifs("A" > "B", "Test failed", "Test passed");
+
+print "";
+print "Test of '<' operation ...";
+print ifs("A" < "B", "Test passed", "Test failed");
+
+print "";
+print "Assignment test ...";
+a = 1;
+print a;
+s="A";
+print s;
+a = 2;
+print a;
+s="A";
+print s;
+a=3;
+print a;
+print "Test passed";
+
+print "";
+print "substr() test ...";
+print substr("Hello world", 2, 7);
+s="Hello World";
+print s;
+
+print substr(substr("Hello",0,3),0,1) == "H";
+
+print substr(substr("Hello",0,3),0,1)<"J";
+
+print substr(substr("Hello",0,3),0,1) > "J";
+
+print 1+strlen("Hello");
+
+print substr("Hello",0,strlen("Hello")-2);

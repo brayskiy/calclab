@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Calc Lab</string>
+    <string name="SETTINGS">Settings</string>
+    <string name="OPEN">Open</string>
+    <string name="SAVE">Save</string>
+    <string name="EXIT">Exit</string>
+    <string name="TEST">Test</string>
+    <string name="HELP">Help</string>
+    <string name="REFERENCE">Reference</string>
+    <string name="ABOUT">About</string>
+    <string name="OK">OK</string>
+    
+    <string name="COPYRIGHT">&#169; 2013-2015, Boris Rayskiy</string>
+    <string name="MAIL">brayskiy@gmail.com</string>
+    <string name="GRAPHICS">Graphics (Icons)</string>
+    <string name="GRAPHICS_SITE">http://www.visualpharm.com</string>
+    <string name="VER">BoaScript 1.0.10 build 130101</string>
+    <string name="TESTING">Testing</string>
+    <string name="BOASCRIPT">BoaScript is a lightweight and efficient scripting language written in 2009 and using object oriented version of Yacc and C++</string>
+    <string name="BPLOT">BPlot is a C++ scientific graphics library developed in 1999. Some algorithms was provided by authors of PLplot library</string>
+    <string name="TESTING_NAMES">Vlad Rayskiy, Daria Rayskaya</string>
+    <string name="FILE_TO_SAVE">File Name To Save</string>    
+    <string name="graph_type_prompt">Choose a Graph Type</string>
+    <string name="FUNCT1">y(x)=</string>
+    <string name="FUNCT2">y(x)=</string>
+    <string name="XMIN">xMin=</string>
+    <string name="XMAX">xMax=</string>
+    <string name="YMIN">yMin=</string>
+    <string name="YMAX">yMax=</string>
+ 
+    <string name="banner_ad_unit_id_graph_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id_graph">ca-app-pub-3153262301940864/7874146012</string>
+    <string name="banner_ad_unit_id_source">ca-app-pub-3153262301940864/6118211215</string>
+    
+    <string-array name="graph_type_list">
+        <item>Cartesian 2D</item>
+        <item>Cartesian 3D</item>
+        <item>Polar</item>
+        <item>Parametric</item>
+    </string-array>
+     
+</resources>

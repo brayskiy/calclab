@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_blue"
+    xmlns:ads="http://schemas.android.com/apk/res-auto">
+
+    <Button
+        android:id="@+id/functionOpen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/file_open"
+        android:minHeight="24dip"
+        android:minWidth="24dip"/>
+    
+	<Button
+        android:id="@+id/functionSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/file_save"
+        android:layout_toEndOf="@+id/functionOpen"
+        android:minHeight="24dip"
+        android:minWidth="24dip"/>
+    
+    <Button
+        android:id="@+id/functionSaveAs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/file_save_as"
+        android:layout_toEndOf="@+id/functionSave"
+        android:minHeight="24dip"
+        android:minWidth="24dip"/>
+    
+    <Spinner
+    	android:id="@+id/graphType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/graph_type_list"
+        android:prompt="@string/graph_type_prompt"
+		android:textSize="@dimen/base_text_size"
+        android:layout_below="@+id/functionSaveAs" 
+        android:background="@color/amber_1"/>
+     
+    <TextView
+         android:id="@+id/yTextView1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/graphType"
+         android:layout_marginTop="@dimen/base_text_end_margin"
+         android:layout_marginStart="@dimen/base_text_start_margin"
+         android:textColor="@color/yellow"
+         android:textSize="@dimen/base_text_size"
+         android:text="@string/FUNCT1" />
+    
+    <EditText
+         android:id="@+id/functionText1"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/graphType"
+         android:layout_toEndOf="@+id/yTextView1"
+         android:layout_marginTop="@dimen/base_text_top_margin"
+         android:layout_marginEnd="@dimen/base_text_end_margin"
+         android:background="@color/white"
+         android:ems="10"
+         android:textSize="@dimen/base_text_size"
+         android:gravity="top|start"
+         android:inputType="textNoSuggestions"
+         android:scrollbars="vertical"
+         android:textColor="@color/black"
+         android:textCursorDrawable="@drawable/color_cursor" />
+    
+    <TextView
+         android:id="@+id/yTextView2"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/yTextView1"
+         android:layout_marginTop="@dimen/base_text_top_margin"
+         android:layout_marginStart="@dimen/base_text_start_margin"
+         android:textColor="@color/yellow"
+         android:textSize="@dimen/base_text_size"
+         android:text="@string/FUNCT2" />
+    
+    <EditText
+         android:id="@+id/functionText2"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/functionText1"
+         android:layout_toEndOf="@+id/yTextView2"
+         android:layout_marginTop="@dimen/base_text_top_margin"
+         android:layout_marginEnd="@dimen/base_text_end_margin"
+         android:background="@color/white"
+         android:ems="10"
+         android:textSize="@dimen/base_text_size"
+         android:gravity="top|start"
+         android:inputType="textNoSuggestions"
+         android:scrollbars="vertical"
+         android:textColor="@color/black"
+         android:textCursorDrawable="@drawable/color_cursor" />
+      
+    <View
+    	android:id="@+id/separator2"
+       	android:background="@color/amber_1"
+       	android:layout_width="fill_parent" 
+        android:layout_height="2.0dip"
+        android:layout_below="@+id/functionText2"
+        android:layout_marginTop="@dimen/base_text_top_margin" />
+      
+	<com.bstech.calclab.view.GraphView
+    	android:id="@+id/graphView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/separator3"
+        android:layout_below="@+id/separator2" />
+      
+    <View
+    	android:id="@+id/separator3"
+        android:background="@color/amber_1"
+        android:layout_width="fill_parent" 
+        android:layout_height="2.0dip"
+        android:layout_above="@+id/xBorders" />
+      
+    <LinearLayout
+        android:id="@+id/xBorders"
+      	android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_above="@+id/yBorders"
+        android:layout_marginTop="@dimen/base_text_top_margin"
+        android:baselineAligned="false">
+  
+  		<RelativeLayout
+  		    android:id="@+id/borderXMin"
+  		    android:layout_weight="1"
+  		    android:layout_height="fill_parent"
+  		    android:layout_width="fill_parent"
+  		    android:layout_marginStart="@dimen/base_text_start_margin" >
+  		    
+  			<TextView
+        		android:id="@+id/borderXMinTextView"
+         		android:layout_width="wrap_content"
+         		android:layout_height="wrap_content"
+	        	android:textSize="@dimen/base_text_size"
+    	    	android:text="@string/XMIN"
+        		android:textColor="@color/yellow" />
+  			
+  			<EditText
+        		android:id="@+id/borderXMinText"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:layout_toEndOf="@+id/borderXMinTextView"
+        		android:layout_marginEnd="@dimen/base_text_end_margin"
+        		android:background="@color/white"
+        		android:ems="10"
+        		android:textSize="@dimen/base_text_size"
+        		android:gravity="top|start"
+        		android:inputType="textNoSuggestions"
+		        android:textColor="@color/black"
+        		android:textCursorDrawable="@drawable/color_cursor" />
+  		    
+  		</RelativeLayout>
+  
+  		<RelativeLayout
+  		    android:id="@+id/borderXMax"
+  		    android:layout_weight="1"
+  		    android:layout_height="fill_parent"
+  		    android:layout_width="fill_parent"
+  		    android:layout_marginStart="@dimen/base_text_start_margin" >
+  		    
+  		    <TextView
+        		android:id="@+id/borderXMaxTextView"
+         		android:layout_width="wrap_content"
+         		android:layout_height="wrap_content"
+	        	android:textSize="@dimen/base_text_size"
+    	    	android:text="@string/XMAX"
+        		android:textColor="@color/yellow" />
+  		    
+  		    <EditText
+        		android:id="@+id/borderXMaxText"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:layout_toEndOf="@+id/borderXMaxTextView"
+        		android:layout_marginEnd="@dimen/base_text_end_margin"
+        		android:background="@color/white"
+        		android:ems="10"
+        		android:textSize="@dimen/base_text_size"
+        		android:gravity="top|start"
+        		android:inputType="textNoSuggestions"
+		        android:textColor="@color/black"
+        		android:textCursorDrawable="@drawable/color_cursor" />
+  		    
+  		</RelativeLayout>
+  		
+	</LinearLayout>
+        
+    <LinearLayout
+        android:id="@+id/yBorders"
+      	android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_above="@+id/runGraph"
+        android:layout_marginTop="@dimen/base_text_top_margin"
+        android:baselineAligned="false">
+  
+  		<RelativeLayout
+  		    android:id="@+id/borderYMin"
+  		    android:layout_weight="1"
+  		    android:layout_height="fill_parent"
+  		    android:layout_width="fill_parent"
+  		    android:layout_marginStart="@dimen/base_text_start_margin" >
+  		    
+  			<TextView
+        		android:id="@+id/borderYMinTextView"
+         		android:layout_width="wrap_content"
+         		android:layout_height="wrap_content"
+	        	android:textSize="@dimen/base_text_size"
+    	    	android:text="@string/YMIN"
+        		android:textColor="@color/yellow" />
+  			
+  			<EditText
+        		android:id="@+id/borderYMinText"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:layout_toEndOf="@+id/borderYMinTextView"
+        		android:layout_marginEnd="@dimen/base_text_end_margin"
+        		android:background="@color/white"
+        		android:ems="10"
+        		android:textSize="@dimen/base_text_size"
+        		android:gravity="top|start"
+        		android:inputType="textNoSuggestions"
+		        android:textColor="@color/black"
+        		android:textCursorDrawable="@drawable/color_cursor" />
+  		    
+  		</RelativeLayout>
+  
+  		<RelativeLayout
+  		    android:id="@+id/borderYMax"
+  		    android:layout_weight="1"
+  		    android:layout_height="fill_parent"
+  		    android:layout_width="fill_parent"
+  		    android:layout_marginStart="@dimen/base_text_start_margin" >
+  		    
+  		    <TextView
+        		android:id="@+id/borderYMaxTextView"
+         		android:layout_width="wrap_content"
+         		android:layout_height="wrap_content"
+	        	android:textSize="@dimen/base_text_size"
+    	    	android:text="@string/YMAX"
+        		android:textColor="@color/yellow" />
+  		    
+  		    <EditText
+        		android:id="@+id/borderYMaxText"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:layout_toEndOf="@+id/borderYMaxTextView"
+        		android:layout_marginEnd="@dimen/base_text_end_margin"
+        		android:background="@color/white"
+        		android:ems="10"
+        		android:textSize="@dimen/base_text_size"
+        		android:gravity="top|start"
+        		android:inputType="textNoSuggestions"
+		        android:textColor="@color/black"
+        		android:textCursorDrawable="@drawable/color_cursor" />
+  		    
+  		</RelativeLayout>
+  		
+	</LinearLayout>
+    
+    
+    <Button
+    	android:id="@+id/runGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/run_script"
+        android:layout_alignParentBottom="true"
+        android:minHeight="24dip"
+        android:minWidth="24dip" />
+
+</RelativeLayout>
