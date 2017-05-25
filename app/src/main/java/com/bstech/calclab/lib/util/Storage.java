@@ -19,8 +19,7 @@ public class Storage
     
     public static void write(final String file, final String data)
     { 
-        try
-        {
+        try {
             if ((file == null) || (data == null))
             {
                 Log.w("Nothing to write");

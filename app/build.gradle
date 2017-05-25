@@ -19,9 +19,27 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
+            buildConfigField "boolean", "LOGGING_ENABLED", "true"
+
+            debuggable true
             minifyEnabled false
+        }
+        qa {
+            buildConfigField "boolean", "LOGGING_ENABLED", "true"
+
+            minifyEnabled false
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.config
+        }
+        release {
+            buildConfigField "boolean", "LOGGING_ENABLED", "false"
+
+            minifyEnabled false
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.config
         }
     }
 
@@ -40,4 +58,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+
+    compile 'com.google.code.gson:gson:2.7'
 }

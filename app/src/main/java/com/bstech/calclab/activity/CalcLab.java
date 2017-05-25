@@ -22,25 +22,11 @@ import com.bstech.calclab.fragment.BoascriptFragment;
 import com.bstech.calclab.fragment.DummyFragment;
 import com.bstech.calclab.fragment.GraphFragment;
 import com.bstech.calclab.lib.log.Log;
-import com.bstech.calclab.lib.util.Storage;
-
 
 public class CalcLab extends FragmentActivity
 {
     // MEMBERS
-    
-    final public static int FUNC_TAB   = 0;
-    final public static int GRAPH_TAB  = 1;
-    final public static int SOURCE_TAB = 2;
-    final public static int RESULT_TAB = 3;
-    
-    public native String runBoaScript(final String script);
-    
-    static
-    {
-        System.loadLibrary("native-lib");
-    }
-    
+
     final private static String BOASCRIPT = "Boascript";
     final private static String GRAPH     = "Graph";
     
@@ -49,27 +35,16 @@ public class CalcLab extends FragmentActivity
     // METHODS
 
     @Override
-    protected void onStart()
-    {
-        super.onStart();
-    }
-    
-
-    @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        Log.init(true);
         
         GlobalData.mainActivity = CalcLab.this;
         GlobalData.context      = this;
         GlobalData.res          = this.getResources();
-        
-        Storage.setContext(this);
-        
+
         // Load Font
         try
         {
@@ -92,7 +67,7 @@ public class CalcLab extends FragmentActivity
         }
         catch (Exception e)
         {
-            Log.e("Exception");
+            Log.e("" + e);
         }
         
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
@@ -106,7 +81,7 @@ public class CalcLab extends FragmentActivity
             {
                 android.app.FragmentManager fm = getFragmentManager();
                 
-                GraphFragment graphFragment     = (GraphFragment)fm.findFragmentByTag(GRAPH);
+                GraphFragment graphFragment = (GraphFragment)fm.findFragmentByTag(GRAPH);
                 BoascriptFragment boascriptFragment = (BoascriptFragment)fm.findFragmentByTag(BOASCRIPT);
                 
                 FragmentTransaction ft = fm.beginTransaction();
@@ -235,7 +210,7 @@ public class CalcLab extends FragmentActivity
     @Override
     public void onBackPressed()
     {
-        return;
+
     }
         
 } // class Calclab

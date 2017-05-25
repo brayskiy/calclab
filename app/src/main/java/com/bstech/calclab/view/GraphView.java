@@ -3,13 +3,9 @@ package com.bstech.calclab.view;
 
 import java.util.Vector;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.bstech.calclab.GlobalData;
 import com.bstech.calclab.lib.graphics.BColor;
 import com.bstech.calclab.lib.log.Log;
+import com.bstech.calclab.models.DrawData;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -21,13 +17,13 @@ import android.widget.Toast;
 
 public class GraphView extends View 
 {
-    private Paint  paint  = new Paint();
+    private Paint paint = new Paint();
     
-    private Vector<Integer> x1   = new Vector<Integer>();
-    private Vector<Integer> x2   = new Vector<Integer>();
-    private Vector<Integer> y1   = new Vector<Integer>();
-    private Vector<Integer> y2   = new Vector<Integer>();
-    private Vector<Byte>    type = new Vector<Byte>();
+    private Vector<Integer> x1   = new Vector<>();
+    private Vector<Integer> x2   = new Vector<>();
+    private Vector<Integer> y1   = new Vector<>();
+    private Vector<Integer> y2   = new Vector<>();
+    private Vector<Byte>    type = new Vector<>();
 
     // MEMBERS
     
@@ -68,54 +64,37 @@ public class GraphView extends View
         y1.clear();
         y2.clear();
         type.clear();
-        
-        try
-        {
-            JSONArray json = new JSONObject(inData).getJSONArray("items");
-        
-            Log.d("json.length", "" + json.length());
-            
-            for (int i = 0; i < json.length(); ++i)
+
+        DrawData drawData = DrawData.fromJson(inData);
+        for (DrawData.Item item : drawData.items) {
+            if (item.tag.equals("line"))
             {
-                JSONObject item = json.getJSONObject(i);        
-        
-                String tag = item.getString("tag");
-        
-                if (tag.equals("line"))
-                {
-                    type.add((byte)'L');
-                    x1.add(item.getInt("x1"));
-                    y1.add(item.getInt("y1"));
-                    x2.add(item.getInt("x2"));
-                    y2.add(item.getInt("y2"));
-                }
-                else if (tag.equals("pen"))
-                {
-                    type.add((byte)'C');
-                    x1.add(item.getInt("color"));
-                    y1.add(0);
-                    x2.add(0);
-                    y2.add(0);
-                }
-                else if (tag.equals("error"))
-                {
-                    final String msg = item.getString("msg");
-                    Log.e("JNI ERROR", msg);
-                    Toast.makeText(GlobalData.context, msg, Toast.LENGTH_LONG).show();
-                    break;
-                }
-                else if (tag.equals("debug"))
-                {
-                    final String msg = item.getString("msg");
-                    Log.d("JNI DEBUG", msg);
-                }
+                type.add((byte)'L');
+                x1.add(item.x1);
+                y1.add(item.y1);
+                x2.add(item.x2);
+                y2.add(item.y2);
+            }
+            else if (item.tag.equals("pen"))
+            {
+                type.add((byte)'C');
+                x1.add(item.color);
+                y1.add(0);
+                x2.add(0);
+                y2.add(0);
+            }
+            else if (item.tag.equals("error"))
+            {
+                final String msg = item.msg;
+                Log.e(msg);
+                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                break;
+            }
+            else if (item.tag.equals("debug"))
+            {
+                Log.d(item.msg);
             }
         }
-        catch (JSONException e)
-        {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
-        
         invalidate();
     }
     

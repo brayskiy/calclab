@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bstech.calclab.NdkBridge;
 import com.bstech.calclab.R;
 import com.bstech.calclab.TaskType;
 import com.bstech.calclab.filemanager.FileManager;
@@ -29,6 +31,7 @@ import com.bstech.calclab.GlobalData;
 import com.bstech.calclab.lib.io.FIleIO;
 import com.bstech.calclab.lib.log.Log;
 import com.bstech.calclab.lib.util.Storage;
+import com.bstech.calclab.models.GraphData;
 import com.bstech.calclab.view.GraphView;
 
 
@@ -54,10 +57,7 @@ public class GraphFragment extends Fragment
     private GraphView graphView     = null;
     private Spinner   graphType     = null;
     private int       m_taskType    = -1;
-    private boolean   m_initView    = true;
-    
-    private volatile ProgressDialog progressDialog = null;
-    
+
     // METHODS
     
     public GraphFragment()
@@ -66,55 +66,51 @@ public class GraphFragment extends Fragment
     }
     
 
-    private String getGraphData(final int currentTask)
+    private GraphData getGraphData(final int currentTask)
     {
+        GraphData data = new GraphData();
+
         DisplayMetrics metrics = new DisplayMetrics();
         GlobalData.mainActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int densityDpi = metrics.densityDpi;
+        data.densityDpi = metrics.densityDpi;
+        data.task = currentTask;
+        data.function1 = functionText1.getText().toString();
+        data.function2 = functionText2.getText().toString();
 
-        Log.d("densityDpi = " + densityDpi);
-        
-        StringBuilder in = new StringBuilder();
-        in.append("" + currentTask);
-        in.append("@");
-        in.append(functionText1.getText().toString());
-        in.append("@");
-        in.append(functionText2.getText().toString());
-        in.append("@");
-        in.append(xMinText.getText().toString());
-        in.append("@");
-        in.append(xMaxText.getText().toString());
-        in.append("@");
-        in.append(yMinText.getText().toString());
-        in.append("@");
-        in.append(yMaxText.getText().toString());
-        in.append("@" + graphView.getWidth());
-        in.append("@" + graphView.getHeight());
-        in.append("@" + densityDpi);
-            
-        return in.toString();
+        try {
+            data.xMin = Double.parseDouble(xMinText.getText().toString());
+        } catch (Exception e) {}
+
+        try {
+            data.xMax = Double.parseDouble(xMaxText.getText().toString());
+        } catch (Exception e) {}
+
+        try {
+            data.yMin = Double.parseDouble(yMinText.getText().toString());
+        } catch (Exception e) {}
+
+        try {
+            data.yMax = Double.parseDouble(yMaxText.getText().toString());
+        } catch (Exception e) {}
+
+        data.viewWidth = graphView.getWidth();
+        data.viewHeight = graphView.getHeight();
+
+        return data;
     }
     
     
-    private int setGraphData(final String [] tokens)
+    private int setGraphData(final String json)
     {
-        int taskType = -1;
+        GraphData data = GraphData.fromJson(json);
+        functionText1.setText(data.function1);
+        functionText2.setText(data.function2);
+        xMinText.setText("" + data.xMin);
+        xMaxText.setText("" + data.xMax);
+        yMinText.setText("" + data.yMin);
+        yMaxText.setText("" + data.yMax);
 
-        if (tokens != null)
-        {
-            if (tokens.length == 10)
-            {
-                taskType = Integer.parseInt(tokens[0]);
- 
-                functionText1.setText(tokens[1]);
-                functionText2.setText(tokens[2]);
-                xMinText.setText(tokens[3]);
-                xMaxText.setText(tokens[4]);
-                yMinText.setText(tokens[5]);
-                yMaxText.setText(tokens[6]);
-            }
-        }
-        return taskType;
+        return data.task;
     }
     
     
@@ -223,7 +219,7 @@ public class GraphFragment extends Fragment
                 xMinText.setText("0");
                 xMinTextView.setText("fMin=");
                 xMinText.setEnabled(false);
-                xMaxText.setText("6.283185307179586");//476925286766559");
+                xMaxText.setText("6.283");
                 xMaxTextView.setText("fMax=");
                 xMaxText.setEnabled(false);
                 yMinText.setText("Not available");
@@ -290,22 +286,15 @@ public class GraphFragment extends Fragment
         graphView     = (GraphView)view.findViewById(R.id.graphView);
         graphType     = (Spinner)view.findViewById(R.id.graphType);
         
-        m_initView = true;
-        
         graphType.setOnItemSelectedListener(new OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
             {
                 Log.i("m_TaskType = " + m_taskType);
-                
-                if (!m_initView)
-                {
-                    Storage.write(GRAPH_DATA_SAVE_NAME + m_taskType, getGraphData(m_taskType));
-                }
-                else
-                {
-                    m_initView = false;
+
+                if (m_taskType != -1) {
+                    Storage.write(GRAPH_DATA_SAVE_NAME + m_taskType, getGraphData(m_taskType).toJson());
                 }
                 
                 m_taskType = arg2;
@@ -313,32 +302,20 @@ public class GraphFragment extends Fragment
                 setViewItems(m_taskType);
                 
                 String graphData = Storage.read(GRAPH_DATA_SAVE_NAME + m_taskType);
-                
-                if (graphData != null)
-                {
-                    String [] tokens = graphData.split("\\@");
-                
-                    if ((setGraphData(tokens) != m_taskType) || tokens[1].isEmpty())
-                    {
-                        Log.e("Wrong data: " + tokens.toString());
-                    }
+
+                if (graphData != null) {
+                    setGraphData(graphData);
                 }
-                else
-                {
+                else {
                     m_taskType = graphType.getSelectedItemPosition();
                     setDefaultData(m_taskType);
                 }
                         
-                 fetchData(getGraphData(m_taskType));
+                fetchData(getGraphData(m_taskType).toJson());
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0)
-            {
-                Log.i("m_TaskType = " + m_taskType);
-                
-                //fetchData(getGraphData(m_taskType));
-            }
+            public void onNothingSelected(AdapterView<?> arg0) {}
         });
         
          Button runGraph = (Button)view.findViewById(R.id.runGraph);
@@ -346,7 +323,7 @@ public class GraphFragment extends Fragment
              @SuppressLint("NewApi")
             public void onClick(View view)
              {
-                 fetchData(getGraphData(m_taskType));
+                 fetchData(getGraphData(m_taskType).toJson());
              }
          });
 
@@ -366,7 +343,7 @@ public class GraphFragment extends Fragment
              {
                  if (workFile != null)
                  {
-                     FIleIO.write(workFile, getGraphData(m_taskType));
+                     FIleIO.write(workFile, getGraphData(m_taskType).toJson());
                  }
              }
          });
@@ -398,7 +375,7 @@ public class GraphFragment extends Fragment
     }
     
     
-    private void fetchData(final String in)
+    private void fetchData(final String graphData)
     {
         if ((graphView.getWidth() == 0) || (graphView.getHeight() == 0))
         {
@@ -406,45 +383,30 @@ public class GraphFragment extends Fragment
             graphType.setSelection(m_taskType);
             return;
         }
-        
-        if (progressDialog != null)
-        {
-            Log.w("progressDialog != null");
-            return;
-        }
-        
-        progressDialog = ProgressDialog.show(GlobalData.context, "", "Drawing...");
+
+        final ProgressDialog progressDialog = ProgressDialog.show(GlobalData.context, "", "Drawing...");
         
         new Thread()
         {
             public void run()
             {
-                String result = GlobalData.mainActivity.runBoaScript(in);
-                
-                Bundle data = new Bundle();
-                data.putString("graph", result);
-                Message msg = new Message();
-                msg.setData(data);
-                messageHandler.sendMessage(msg);
+                final String result = NdkBridge.runBoaScript(graphData);
+
+                new Handler(Looper.getMainLooper(), new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(Message msg) {
+
+                        String graph = result;
+                        graphView.setData(graph);
+
+                        progressDialog.dismiss();
+
+                        return false;
+                    }
+                }).sendEmptyMessage(0);
             }
         }.start();
     }
-    
-    
-    private Handler messageHandler = new Handler()
-    {
-        public void handleMessage(Message msg)
-        {
-            super.handleMessage(msg);
-            
-            String graph = msg.getData().getString("graph");
-            graphView.setData(graph);
-            
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-    };
-    
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -464,9 +426,8 @@ public class GraphFragment extends Fragment
                             workFile = file;
                                                     
                             Log.i("graphData = " + graphData);
-                            
-                            String [] tokens = graphData.split("\\@");
-                            m_taskType = setGraphData(tokens);
+
+                            m_taskType = setGraphData(graphData);
                             graphType.setSelection(m_taskType);
                         }
                     }
@@ -490,7 +451,7 @@ public class GraphFragment extends Fragment
                         if ((data != null) && data.hasExtra("filePath"))
                         {
                             File file = new File(data.getExtras().getString("filePath"));
-                            if (FIleIO.write(file, getGraphData(m_taskType)))
+                            if (FIleIO.write(file, getGraphData(m_taskType).toJson()))
                             {
                                 workFile = file;
                             }
@@ -521,7 +482,6 @@ public class GraphFragment extends Fragment
         } // switch (requestCode)
     } 
 
-    
     @Override
     public void onResume()
     {
@@ -532,41 +492,14 @@ public class GraphFragment extends Fragment
          graphType.setSelection(m_taskType);
     }
     
-    
-    @Override
-    public void onStart()
-    {
-        Log.i("onStart");
-        
-        super.onStart();
-    }
-    
-    
-    @Override
-    public void onStop()
-    {
-        Log.i("onStop");
-        
-        Storage.write(GRAPH_DATA_SAVE_NAME + m_taskType, getGraphData(m_taskType));
-        m_initView = true;
-        
-        graphType.setSelection(-1);
-        
-        super.onStop();
-    }
- 
-    
     @Override
     public void onPause()
     {
-        Log.i("onPause");
-        
-        Storage.write(GRAPH_DATA_SAVE_NAME + m_taskType, getGraphData(m_taskType));
-        m_initView = true;
+        Storage.write(GRAPH_DATA_SAVE_NAME + m_taskType, getGraphData(m_taskType).toJson());
         
         graphType.setSelection(-1);
         
         super.onPause();
     }
     
-} // class SourceFragment
+} // class GraphFragment

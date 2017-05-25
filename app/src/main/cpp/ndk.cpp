@@ -16,6 +16,8 @@
 
 #include <jni.h>
 
+#include <json.h>
+
 #include <string.h>
 #include <sstream>
 #include <string>
@@ -290,47 +292,77 @@ void plotPolar(BPlotDriverGen& driver, BPlot& pl, Column& graphTokens, std::ostr
 }
 
 
-bool makeBoaScript(const std::string&  srcStr,
-                   std::ostringstream& boaScript,
+bool makeBoaScript(const Cell& srcStr,
+                   Cell& boaScript,
                    DevParam&           param,
                    UInt16&             taskType,
                    std::ostringstream& retOss)
 {
-    Column tokens;
-    util::Tokenizer::tokenize1(srcStr, tokens, "@", true);
+    rapidjson::Document doc;
 
-    if (tokens.size() != 10)
-    {
-        jsonMessage(retOss, "error", "General data error");
-        return false;
+    if (doc.Parse<0>(srcStr.c_str()).HasParseError()) return false;
+
+    taskType = 0;
+    if (doc.HasMember("task") && doc["task"].IsInt()) {
+        taskType = doc["task"].GetInt();
     }
 
-    util::Tokenizer::string2number(tokens[0], taskType);
+    Cell func1 = "";
+    if (doc.HasMember("function1") && doc["function1"].IsString()) {
+        func1 = doc["function1"].GetString();
+    }
 
-    std::string func1 = tokens[1];
-    std::string func2 = tokens[2];
+    Cell func2 = "";
+    if (doc.HasMember("function2") && doc["function2"].IsString()) {
+        func2 = doc["function2"].GetString();
+    }
 
-    Float xMin;
-    util::Tokenizer::string2float(tokens[3], xMin);
-    Float xMax;
-    util::Tokenizer::string2float(tokens[4], xMax);
-    Float yMin;
-    util::Tokenizer::string2float(tokens[5], yMin);
-    Float yMax;
-    util::Tokenizer::string2float(tokens[6], yMax);
+    Float xMin = 0;
+    if (doc.HasMember("xMin") && doc["xMin"].IsNumber()) {
+        xMin = (Float)doc["xMin"].GetDouble();
+    }
 
-    UInt16 width;
-    util::Tokenizer::string2number(tokens[7], width);
-    UInt16 height;
-    util::Tokenizer::string2number(tokens[8], height);
-    UInt16 densityDpi;
-    util::Tokenizer::string2number(tokens[9], densityDpi);
+    Float xMax = 0;
+    if (doc.HasMember("xMax") && doc["xMax"].IsNumber()) {
+        xMax = (Float)doc["xMax"].GetDouble();
+    }
 
+    Float yMin = 0;
+    if (doc.HasMember("yMin") && doc["yMin"].IsNumber()) {
+        yMin = (Float)doc["yMin"].GetDouble();
+    }
+
+    Float yMax = 0;
+    if (doc.HasMember("yMax") && doc["yMax"].IsNumber()) {
+        yMax = (Float)doc["yMax"].GetDouble();
+    }
+
+    UInt16 width = 0;
+    if (doc.HasMember("viewWidth") && doc["viewWidth"].IsInt()) {
+        width = (UInt16)doc["viewWidth"].GetInt();
+    }
+
+    UInt16 height = 0;
+    if (doc.HasMember("viewHeight") && doc["viewHeight"].IsInt()) {
+        height = (UInt16)doc["viewHeight"].GetInt();
+    }
+
+    UInt16 densityDpi = 0;
+    if (doc.HasMember("densityDpi") && doc["densityDpi"].IsInt()) {
+        densityDpi = (UInt16)doc["densityDpi"].GetInt();
+    }
+
+    UInt16 discrete = 1;
+    if (doc.HasMember("discrete") && doc["discrete"].IsInt()) {
+        discrete = (UInt16)doc["discrete"].GetInt();
+    }
+
+    char str[1024];
     switch (taskType)
     {
     case BOA_SCRIPT:
         {
-            boaScript << func1;
+            boaScript = func1;
         }
         break;
     
@@ -341,20 +373,11 @@ bool makeBoaScript(const std::string&  srcStr,
                 jsonMessage(retOss, "error", "xMin should be less than xMax");
                 return false;
             }
-        
-            boaScript << "x = " << xMin          << ";" << std::endl;
-            boaScript << "b = " << xMax          << ";" << std::endl;
-            Double step = (xMax - xMin) / 50;
-            boaScript << "s = " << step          << ";" << std::endl;          
-            boaScript << "while (x <= b)"               << std::endl;
-            boaScript << "{"                            << std::endl;
-            boaScript << "    y = " << func1     << ";" << std::endl;
-            boaScript << "    print x"           << ";" << std::endl;  
-            boaScript << "    print \"@\""       << ";" << std::endl;
-            boaScript << "    print y"           << ";" << std::endl;
-            boaScript << "    print \"@\""       << ";" << std::endl;
-            boaScript << "    x += s"            << ";" << std::endl; 
-            boaScript << "}"                            << std::endl;  
+
+            Double step = (xMax - xMin) / discrete;
+            Cell format = "x = %f; b = %f; s = %f; while (x <= b) { y = %s; print x; print \"@\"; print y; print \"@\"; x += s; }";
+            ::sprintf(str, format.c_str(), xMin, xMax, step, func1.c_str());
+            boaScript = str;
         }
         break;
             
@@ -371,47 +394,21 @@ bool makeBoaScript(const std::string&  srcStr,
                 jsonMessage(retOss, "error", "yMin should be less than yMax");
                 return false;
             }
-        
-            boaScript << "b = " << xMax              << ";" << std::endl;
-            boaScript << "d = " << yMax              << ";" << std::endl;
-            Double stepX = (xMax - xMin) / 50;
-            Double stepY = (yMax - yMin) / 50;
-            boaScript << "v = " << stepX             << ";" << std::endl;
-            boaScript << "w = " << stepY             << ";" << std::endl;
-            boaScript << "x = " << xMin              << ";" << std::endl;
-            boaScript << "while (x <= b)"                   << std::endl;
-            boaScript << "{"                                << std::endl;
-            boaScript << "    y = " << yMin          << ";" << std::endl;
-            boaScript << "    while (y <= d)"               << std::endl;
-            boaScript << "    {"                            << std::endl;
-            boaScript << "        z = " << func1     << ";" << std::endl;
-            boaScript << "        print x"           << ";" << std::endl;  
-            boaScript << "        print \"@\""       << ";" << std::endl;
-            boaScript << "        print y"           << ";" << std::endl;
-            boaScript << "        print \"@\""       << ";" << std::endl;
-            boaScript << "        print z"           << ";" << std::endl;
-            boaScript << "        print \"@\""       << ";" << std::endl;
-            boaScript << "        y += w"            << ";" << std::endl; 
-            boaScript << "    }"                            << std::endl;  
-            boaScript << "    x += v"                << ";" << std::endl; 
-            boaScript << "}"                                << std::endl; 
+
+            Double stepX = (xMax - xMin) / discrete;
+            Double stepY = (yMax - yMin) / discrete;
+
+            Cell format = "b = %.6f; d = %.6f; v = %.6f; w = %.6f; x = %.6f; while (x <= b) { y = %.6f; while (y <= d) { z = %s; print x; print \"@\"; print y; print \"@\"; print z; print \"@\"; y += w; } x += v; }";
+            ::sprintf(str, format.c_str(), xMax, yMax, stepX, stepY, xMin, yMin, func1.c_str());
+            boaScript = str;
         }
         break;
         
     case POLAR:
         {
-            boaScript << "f = 0"                 << ";" << std::endl;
-            boaScript << "b = 2 * pi()"          << ";" << std::endl;
-            boaScript << "s = pi() / 180"        << ";" << std::endl;          
-            boaScript << "while (f <= b)"               << std::endl;
-            boaScript << "{"                            << std::endl;
-            boaScript << "    r = " << func1     << ";" << std::endl;
-            boaScript << "    print f"           << ";" << std::endl;  
-            boaScript << "    print \"@\""       << ";" << std::endl;
-            boaScript << "    print r"           << ";" << std::endl;
-            boaScript << "    print \"@\""       << ";" << std::endl;
-            boaScript << "    f += s"            << ";" << std::endl; 
-            boaScript << "}"                            << std::endl;  
+            Cell format = "f = 0; b = 2 * pi(); s = pi() / 180; while (f <= b) { r = %s; print f; print \"@\"; print r; print \"@\"; f += s; }";
+            ::sprintf(str, format.c_str(), func1.c_str());
+            boaScript = str;
         }
         break;
             
@@ -422,20 +419,12 @@ bool makeBoaScript(const std::string&  srcStr,
                 jsonMessage(retOss, "error", "xMin should be less than xMax");
                 return false;
             }
-            
-            boaScript << "t = " << xMin          << ";" << std::endl;
-            boaScript << "d = " << xMax          << ";" << std::endl;
-            boaScript << "s = (d - t) / 500"     << ";" << std::endl;          
-            boaScript << "while (t <= d)"               << std::endl;
-            boaScript << "{"                            << std::endl;
-            boaScript << "    x = " << func1     << ";" << std::endl;
-            boaScript << "    print x"           << ";" << std::endl;  
-            boaScript << "    print \"@\""       << ";" << std::endl;
-            boaScript << "    y = " << func2     << ";" << std::endl;
-            boaScript << "    print y"           << ";" << std::endl;
-            boaScript << "    print \"@\""       << ";" << std::endl;
-            boaScript << "    t += s"            << ";" << std::endl; 
-            boaScript << "}"                            << std::endl;          
+
+            Double step = (xMax - xMin) / discrete;
+
+            Cell format = "t = %.6f; d = %.6f; s = %.6f; while (t <= d) { x = %s; print x; print \"@\"; y = %s; print y; print \"@\"; t +=s; }";
+            ::sprintf(str, format.c_str(), xMin, xMax, step, func1.c_str(), func2.c_str());
+            boaScript = str;
         }
         break;
     }
@@ -453,18 +442,15 @@ extern "C" {
 #endif
 
 
-jstring Java_com_bstech_calclab_activity_CalcLab_runBoaScript(JNIEnv* env,
-                                                              jobject obj,
-                                                              jstring srcData)
+jstring Java_com_bstech_calclab_NdkBridge_runBoaScript(JNIEnv* env, jobject obj, jstring srcData)
 {
     jboolean isCopy;  
     std::string srcStr(env->GetStringUTFChars(srcData, &isCopy)); 
 
-    std::ostringstream boaScript;
-    DevParam           param;
-    UInt16             taskType;
-    
-    
+    Cell boaScript;
+    DevParam param;
+    UInt16   taskType;
+
     std::ostringstream retOss;
     jsonBegin(retOss);
     
@@ -474,7 +460,7 @@ jstring Java_com_bstech_calclab_activity_CalcLab_runBoaScript(JNIEnv* env,
         return env->NewStringUTF(retOss.str().c_str());
     }
     
-    if (boaScript.str().empty())
+    if (boaScript.empty())
     {
         jsonMessage(retOss, "error", "system error");
         jsonEnd(retOss);
@@ -499,7 +485,7 @@ jstring Java_com_bstech_calclab_activity_CalcLab_runBoaScript(JNIEnv* env,
     try
     {
         BoaScript c;        
-        std::string& bsOut = c.Calc(boaScript.str());
+        std::string& bsOut = c.Calc(boaScript);
             
         if (bsOut.find("error") != std::string::npos)
         {
@@ -576,6 +562,7 @@ jstring Java_com_bstech_calclab_activity_CalcLab_runBoaScript(JNIEnv* env,
     jsonEnd(retOss);
     return env->NewStringUTF(retOss.str().c_str());
 }
+
 
 #ifdef __cplusplus
 } // extern "C"

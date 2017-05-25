@@ -3,21 +3,21 @@ package com.bstech.calclab.fragment;
 
 import java.io.File;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import com.bstech.calclab.NdkBridge;
 import com.bstech.calclab.R;
 import com.bstech.calclab.TaskType;
 import com.bstech.calclab.filemanager.FileManager;
 import com.bstech.calclab.GlobalData;
 import com.bstech.calclab.lib.io.FIleIO;
+import com.bstech.calclab.lib.log.Log;
 import com.bstech.calclab.lib.util.Storage;
+import com.bstech.calclab.models.DrawData;
+import com.bstech.calclab.models.GraphData;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +31,7 @@ public class BoascriptFragment extends Fragment
 {    
     private float m_inTextSize  = 18f;
     private float m_outTextSize = 18f;
-    
-    final private static String DEBUG_TAG           = "BoascriptFragment"; 
+
     final private static String BOASCRIPT_SAVE_NAME = "boascript_save";
     
     private EditText inText   = null;
@@ -166,58 +165,38 @@ public class BoascriptFragment extends Fragment
          return view;
     }
 
-    
     private void runScript()
     {
-        StringBuilder in = new StringBuilder();
-        in.append(TaskType.BOA_SCRIPT);
-        in.append("@");
-        in.append(inText.getText().toString());
-        in.append("@2@3@4@5@6@7@8@9");
+        GraphData data = new GraphData();
+        data.task = TaskType.BOA_SCRIPT;
+        data.function1 = inText.getText().toString();
      
-        String res = GlobalData.mainActivity.runBoaScript(in.toString());
+        String res = NdkBridge.runBoaScript(data.toJson());
 
         if (res == null) return;
-        
-        try
-        {
-            JSONArray json = new JSONObject(res).getJSONArray("items");
-        
-            Log.d("json.length", "" + json.length());
-            
-            for (int i = 0; i < json.length(); ++i)
+
+        DrawData drawData = DrawData.fromJson(res);
+        for (DrawData.Item item : drawData.items) {
+            if (item.tag.equals("calc"))
             {
-                JSONObject item = json.getJSONObject(i);        
-        
-                String tag = item.getString("tag");
-                
-                if (tag.equals("calc"))
-                {
-                    StringBuilder out = new StringBuilder();
-                    out.append(outText.getText().toString());
-                    out.append(item.getString("msg"));
-                    outText.setText(out.subSequence(0, out.length()));
-                }
-                else if (tag.equals("error"))
-                {
-                    final String msg = item.getString("msg");
-                    Log.e("JNI ERROR", msg);
-                    Toast.makeText(GlobalData.context, msg, Toast.LENGTH_LONG).show();
-                    break;
-                }
-                else if (tag.equals("debug"))
-                {
-                    final String msg = item.getString("msg");
-                    Log.d("JNI DEBUG", msg);
-                }
+                StringBuilder out = new StringBuilder();
+                out.append(outText.getText().toString());
+                out.append(item.msg);
+                outText.setText(out.subSequence(0, out.length()));
+            }
+            else if (item.tag.equals("error"))
+            {
+                final String msg = item.msg;
+                Log.e(msg);
+                Toast.makeText(GlobalData.context, msg, Toast.LENGTH_LONG).show();
+                break;
+            }
+            else if (item.tag.equals("debug"))
+            {
+                Log.d(item.msg);
             }
         }
-        catch (JSONException e)
-        {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
     }
-    
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -281,7 +260,7 @@ public class BoascriptFragment extends Fragment
             
         default:
             {
-                Log.e(DEBUG_TAG, "Wrong requestCode = " + requestCode);
+                Log.e("Wrong requestCode = " + requestCode);
             }
             break;
             
@@ -293,8 +272,6 @@ public class BoascriptFragment extends Fragment
     public void onResume()
     {
         super.onResume();
-        
-        Log.i("BoascriptFragment", "onResume");
 
         String text = Storage.read(BOASCRIPT_SAVE_NAME);
         
@@ -302,28 +279,14 @@ public class BoascriptFragment extends Fragment
         {
             inText.setText(text);
         }
-        
-        //CharSequence res = out.subSequence(0, out.length());    
-         //outText.setText(res);
     }
     
     @Override
-    public void onStart()
+    public void onPause()
     {
-        super.onStart();
-        
-        Log.i("BoascriptFragment", "onStart");
-    }
-    
-    
-    @Override
-    public void onStop()
-    {
-        Log.i("BoascriptFragment", "onStop");
-
         Storage.write(BOASCRIPT_SAVE_NAME, inText.getText().toString());
         
-        super.onStop();
+        super.onPause();
     }   
  
-} // class SourceFragment
+} // class BoascriptFragment

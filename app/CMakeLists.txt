@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.4.1)
 SET(ROOT_DIR .)
 
 SET(BRSRC ${ROOT_DIR}/brsrc)
+SET(THIRD_PARTY ${BRSRC}/third_party)
+SET(RAPID_JSON ${THIRD_PARTY}/rapidjson-0.1)
 
 SET(NDK src/main/cpp)
 
@@ -29,6 +31,7 @@ include_directories(
     ${BPLOT_INC}
     ${BPLOT_DRV}
     ${BOA_INC}
+    ${RAPID_JSON}/rapidjson
 )
 
 add_library(native-lib SHARED
