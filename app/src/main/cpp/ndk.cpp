@@ -48,8 +48,11 @@ void jsonEnd(std::ostringstream& os)
 }
 
 
-void plotDecart2D(BPlotDriverGen& driver, BPlot& pl, Column graphTokens, std::ostringstream& retOss)
+void plotDecart2D(BPlotDriverGen& driver, BPlot& pl, Cell& data, std::ostringstream& retOss)
 {
+    Column graphTokens;
+    util::Tokenizer::tokenize1(data, graphTokens, "@");
+
     UInt32 size = graphTokens.size() / 2;
     std::vector<Float> x;
     std::vector<Float> y;
@@ -109,8 +112,11 @@ void plotDecart2D(BPlotDriverGen& driver, BPlot& pl, Column graphTokens, std::os
 }
 
 
-void plotDecart3D(BPlotDriverGen& driver, BPlot& pl, Column& graphTokens, std::ostringstream& retOss)
+void plotDecart3D(BPlotDriverGen& driver, BPlot& pl, Cell& data, std::ostringstream& retOss)
 {
+    Column graphTokens;
+    util::Tokenizer::tokenize1(data, graphTokens, "@");
+
     SInt32 opt[]    = {1, 2, 3, 3};
     Float alt[]     = {60, 20, 60, 20};
     Float az[]      = {30, 60, 120, 160};
@@ -210,8 +216,11 @@ void plotDecart3D(BPlotDriverGen& driver, BPlot& pl, Column& graphTokens, std::o
 }
 
 
-void plotPolar(BPlotDriverGen& driver, BPlot& pl, Column& graphTokens, std::ostringstream& retOss)
+void plotPolar(BPlotDriverGen& driver, BPlot& pl, Cell& data, std::ostringstream& retOss)
 {
+    Column graphTokens;
+    util::Tokenizer::tokenize1(data, graphTokens, "@");
+
     UInt32 size = graphTokens.size() / 2;
     std::vector<Float> t;
     std::vector<Float> r;
@@ -292,6 +301,22 @@ void plotPolar(BPlotDriverGen& driver, BPlot& pl, Column& graphTokens, std::ostr
 }
 
 
+void getUshort(rapidjson::Document& doc, const char* name, UInt16& value)
+{
+    if (doc.HasMember(name) && doc[name].IsInt()) {
+        value = (UInt16)doc[name].GetInt();
+    }
+}
+
+
+void getFloat(rapidjson::Document& doc, const char* name, Float& value)
+{
+    if (doc.HasMember(name) && doc[name].IsNumber()) {
+        value = (Float)doc[name].GetDouble();
+    }
+}
+
+
 bool makeBoaScript(const Cell& srcStr,
                    Cell& boaScript,
                    DevParam&           param,
@@ -302,10 +327,7 @@ bool makeBoaScript(const Cell& srcStr,
 
     if (doc.Parse<0>(srcStr.c_str()).HasParseError()) return false;
 
-    taskType = 0;
-    if (doc.HasMember("task") && doc["task"].IsInt()) {
-        taskType = doc["task"].GetInt();
-    }
+    getUshort(doc, "task", taskType);
 
     Cell func1 = "";
     if (doc.HasMember("function1") && doc["function1"].IsString()) {
@@ -317,57 +339,25 @@ bool makeBoaScript(const Cell& srcStr,
         func2 = doc["function2"].GetString();
     }
 
-    Float xMin = 0;
-    if (doc.HasMember("xMin") && doc["xMin"].IsNumber()) {
-        xMin = (Float)doc["xMin"].GetDouble();
-    }
+    Float xMin = 0; getFloat(doc, "xMin", xMin);
+    Float xMax = 0; getFloat(doc, "xMax", xMax);
+    Float yMin = 0; getFloat(doc, "yMin", yMin);
+    Float yMax = 0; getFloat(doc, "yMax", yMax);
 
-    Float xMax = 0;
-    if (doc.HasMember("xMax") && doc["xMax"].IsNumber()) {
-        xMax = (Float)doc["xMax"].GetDouble();
-    }
+    getUshort(doc, "viewWidth", param.width);
+    getUshort(doc, "viewHeight", param.height);
+    getUshort(doc, "densityDpi", param.densityDpi);
 
-    Float yMin = 0;
-    if (doc.HasMember("yMin") && doc["yMin"].IsNumber()) {
-        yMin = (Float)doc["yMin"].GetDouble();
-    }
-
-    Float yMax = 0;
-    if (doc.HasMember("yMax") && doc["yMax"].IsNumber()) {
-        yMax = (Float)doc["yMax"].GetDouble();
-    }
-
-    UInt16 width = 0;
-    if (doc.HasMember("viewWidth") && doc["viewWidth"].IsInt()) {
-        width = (UInt16)doc["viewWidth"].GetInt();
-    }
-
-    UInt16 height = 0;
-    if (doc.HasMember("viewHeight") && doc["viewHeight"].IsInt()) {
-        height = (UInt16)doc["viewHeight"].GetInt();
-    }
-
-    UInt16 densityDpi = 0;
-    if (doc.HasMember("densityDpi") && doc["densityDpi"].IsInt()) {
-        densityDpi = (UInt16)doc["densityDpi"].GetInt();
-    }
-
-    UInt16 discrete = 1;
-    if (doc.HasMember("discrete") && doc["discrete"].IsInt()) {
-        discrete = (UInt16)doc["discrete"].GetInt();
-    }
+    UInt16 discrete = 1; getUshort(doc, "discrete", discrete);
 
     char str[1024];
     switch (taskType)
     {
-    case BOA_SCRIPT:
-        {
+        case BOA_SCRIPT: {
             boaScript = func1;
-        }
-        break;
+        } break;
     
-    case DECART_2D:
-        {
+        case DECART_2D: {
             if (xMax <= xMin)
             {
                 jsonMessage(retOss, "error", "xMin should be less than xMax");
@@ -378,11 +368,9 @@ bool makeBoaScript(const Cell& srcStr,
             Cell format = "x = %f; b = %f; s = %f; while (x <= b) { y = %s; print x; print \"@\"; print y; print \"@\"; x += s; }";
             ::sprintf(str, format.c_str(), xMin, xMax, step, func1.c_str());
             boaScript = str;
-        }
-        break;
+        } break;
             
-    case DECART_3D:
-        {
+        case DECART_3D: {
             if (xMax <= xMin)
             {
                 jsonMessage(retOss, "error", "xMin should be less than xMax");
@@ -401,19 +389,15 @@ bool makeBoaScript(const Cell& srcStr,
             Cell format = "b = %.6f; d = %.6f; v = %.6f; w = %.6f; x = %.6f; while (x <= b) { y = %.6f; while (y <= d) { z = %s; print x; print \"@\"; print y; print \"@\"; print z; print \"@\"; y += w; } x += v; }";
             ::sprintf(str, format.c_str(), xMax, yMax, stepX, stepY, xMin, yMin, func1.c_str());
             boaScript = str;
-        }
-        break;
+        } break;
         
-    case POLAR:
-        {
+        case POLAR: {
             Cell format = "f = 0; b = 2 * pi(); s = pi() / 180; while (f <= b) { r = %s; print f; print \"@\"; print r; print \"@\"; f += s; }";
             ::sprintf(str, format.c_str(), func1.c_str());
             boaScript = str;
-        }
-        break;
+        } break;
             
-    case PARAMETRIC:
-        {
+        case PARAMETRIC: {
             if (xMax <= xMin)
             {
                 jsonMessage(retOss, "error", "xMin should be less than xMax");
@@ -425,14 +409,9 @@ bool makeBoaScript(const Cell& srcStr,
             Cell format = "t = %.6f; d = %.6f; s = %.6f; while (t <= d) { x = %s; print x; print \"@\"; y = %s; print y; print \"@\"; t +=s; }";
             ::sprintf(str, format.c_str(), xMin, xMax, step, func1.c_str(), func2.c_str());
             boaScript = str;
-        }
-        break;
+        } break;
     }
-    
-    param.width      = width;
-    param.height     = height;
-    param.densityDpi = densityDpi;
-    
+
     return true;
 } // makeBoaScript
 
@@ -485,9 +464,9 @@ jstring Java_com_bstech_calclab_NdkBridge_runBoaScript(JNIEnv* env, jobject obj,
     try
     {
         BoaScript c;        
-        std::string& bsOut = c.Calc(boaScript);
+        Cell& calcResult = c.Calc(boaScript);
             
-        if (bsOut.find("error") != std::string::npos)
+        if (calcResult.find("error") != std::string::npos)
         {
             jsonMessage(retOss, "error", "syntax error");
             jsonEnd(retOss);
@@ -498,37 +477,26 @@ jstring Java_com_bstech_calclab_NdkBridge_runBoaScript(JNIEnv* env, jobject obj,
         {
         case BOA_SCRIPT:
             {
-                std::ostringstream os;
-                os << bsOut;
-                jsonMessage(retOss, "calc", os.str()); 
+                jsonMessage(retOss, "calc", calcResult);
             }
             break;
 
         case DECART_2D:
         case PARAMETRIC:
             {
-                Column graphTokens;
-                util::Tokenizer::tokenize1(bsOut, graphTokens, "@");
-
-                plotDecart2D(driver, pl, graphTokens, retOss);
+                plotDecart2D(driver, pl, calcResult, retOss);
             }
             break;
 
         case DECART_3D:
-            { 
-                Column graphTokens;
-                util::Tokenizer::tokenize1(bsOut, graphTokens, "@");
-
-                plotDecart3D(driver, pl, graphTokens, retOss);
+            {
+                plotDecart3D(driver, pl, calcResult, retOss);
             }
             break;
 
         case POLAR:
-            { 
-                Column graphTokens;
-                util::Tokenizer::tokenize1(bsOut, graphTokens, "@");
-
-                plotPolar(driver, pl, graphTokens, retOss);
+            {
+                plotPolar(driver, pl, calcResult, retOss);
             }
             break;
             

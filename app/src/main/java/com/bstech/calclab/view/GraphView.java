@@ -106,9 +106,7 @@ public class GraphView extends View
         paint.setStrokeWidth(2);
         paint.setColor(BColor.get("White"));
         paint.setAntiAlias(true);
-        //canvas.drawPaint(paint);
-        //canvas.drawBitmap(BitmapCache.getBackground(), 0f, 0f, GlobalData.mainPaint);
-         
+
         for (int i = 0; i < type.size(); ++i)
         {
             switch (type.get(i))

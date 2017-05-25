@@ -74,6 +74,7 @@ public class GraphFragment extends Fragment
         GlobalData.mainActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         data.densityDpi = metrics.densityDpi;
         data.task = currentTask;
+        data.discrete = (currentTask == TaskType.DECART_3D) ? 50 : 500;
         data.function1 = functionText1.getText().toString();
         data.function2 = functionText2.getText().toString();
 
