@@ -1,7 +1,5 @@
 package com.bstech.calclab.activity;
 
-
-import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import android.annotation.SuppressLint;
@@ -116,33 +114,6 @@ public class CalcLab extends FragmentActivity
         tabHost.addTab(tabSpecBoascript);
     }
 
-    private void loadFont() {
-        // Load Font
-        try
-        {
-            InputStream is = getResources().openRawResource(R.raw.plxtnd5);
-            int size = is.available();
-            byte [] contents = new byte[size];
-            int got = is.read(contents);
-            if (got == size)
-            {
-                FileOutputStream fos = openFileOutput("plxtnd5.fnt", Context.MODE_PRIVATE);
-                fos.write(contents);
-                fos.close();
-
-                Log.d("size = " + size);
-            }
-            else
-            {
-                Log.e("Error file reading");
-            }
-        }
-        catch (Exception e)
-        {
-            Log.e("" + e);
-        }
-    }
-    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
