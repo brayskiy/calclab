@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TabHost;
 
@@ -45,30 +46,7 @@ public class CalcLab extends FragmentActivity
         GlobalData.context      = this;
         GlobalData.res          = this.getResources();
 
-        // Load Font
-        try
-        {
-            InputStream is = getResources().openRawResource(R.raw.plxtnd5);
-            int size = is.available();
-            byte [] contents = new byte[size];
-            int got = is.read(contents);
-            if (got == size)
-            {
-                FileOutputStream fos = openFileOutput("plxtnd5.fnt", Context.MODE_PRIVATE);
-                fos.write(contents);
-                fos.close();
-                
-                Log.d("size = " + size);
-            }
-            else
-            {
-                Log.e("Error file reading");
-            }
-        }
-        catch (Exception e)
-        {
-            Log.e("" + e);
-        }
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -137,11 +115,36 @@ public class CalcLab extends FragmentActivity
         tabSpecBoascript.setContent(new DummyFragment(getBaseContext()));
         tabHost.addTab(tabSpecBoascript);
     }
-    
+
+    private void loadFont() {
+        // Load Font
+        try
+        {
+            InputStream is = getResources().openRawResource(R.raw.plxtnd5);
+            int size = is.available();
+            byte [] contents = new byte[size];
+            int got = is.read(contents);
+            if (got == size)
+            {
+                FileOutputStream fos = openFileOutput("plxtnd5.fnt", Context.MODE_PRIVATE);
+                fos.write(contents);
+                fos.close();
+
+                Log.d("size = " + size);
+            }
+            else
+            {
+                Log.e("Error file reading");
+            }
+        }
+        catch (Exception e)
+        {
+            Log.e("" + e);
+        }
+    }
     
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
