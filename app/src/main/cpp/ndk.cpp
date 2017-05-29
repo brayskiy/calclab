@@ -350,7 +350,7 @@ bool makeBoaScript(const Cell& srcStr,
 
     UInt16 discrete = 1; getUshort(doc, "discrete", discrete);
 
-    char str[1024];
+    char str[1024 * 4];
     switch (taskType)
     {
         case BOA_SCRIPT: {
@@ -463,12 +463,12 @@ jstring Java_com_bstech_calclab_NdkBridge_runBoaScript(JNIEnv* env, jobject obj,
 
     try
     {
-        BoaScript c;        
-        Cell& calcResult = c.Calc(boaScript);
+        BoaScript boaScriptInstance;
+        Cell& calcResult = boaScriptInstance.Calc(boaScript);
             
         if (calcResult.find("error") != std::string::npos)
         {
-            jsonMessage(retOss, "error", "syntax error");
+            jsonMessage(retOss, "error", "Syntax error");
             jsonEnd(retOss);
             return env->NewStringUTF(retOss.str().c_str());
         }
@@ -476,28 +476,20 @@ jstring Java_com_bstech_calclab_NdkBridge_runBoaScript(JNIEnv* env, jobject obj,
         switch (taskType)
         {
         case BOA_SCRIPT:
-            {
-                jsonMessage(retOss, "calc", calcResult);
-            }
+            jsonMessage(retOss, "calc", calcResult);
             break;
 
         case DECART_2D:
         case PARAMETRIC:
-            {
-                plotDecart2D(driver, pl, calcResult, retOss);
-            }
+            plotDecart2D(driver, pl, calcResult, retOss);
             break;
 
         case DECART_3D:
-            {
-                plotDecart3D(driver, pl, calcResult, retOss);
-            }
+            plotDecart3D(driver, pl, calcResult, retOss);
             break;
 
         case POLAR:
-            {
-                plotPolar(driver, pl, calcResult, retOss);
-            }
+            plotPolar(driver, pl, calcResult, retOss);
             break;
             
         default:

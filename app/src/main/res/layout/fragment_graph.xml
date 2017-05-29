@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/file_open"
         android:minHeight="24dip"
-        android:minWidth="24dip"/>
+        android:minWidth="24dip" />
     
 	<Button
         android:id="@+id/functionSave"
@@ -31,79 +31,101 @@
         android:layout_toEndOf="@+id/functionSave"
         android:minHeight="24dip"
         android:minWidth="24dip"/>
-    
-    <Spinner
-    	android:id="@+id/graphType"
+
+    <RelativeLayout
+        android:id="@+id/graphTypeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/graph_type_list"
-        android:prompt="@string/graph_type_prompt"
-		android:textSize="@dimen/base_text_size"
-        android:layout_below="@+id/functionSaveAs" 
-        android:background="@color/amber_1"/>
-     
-    <TextView
-         android:id="@+id/yTextView1"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/graphType"
-         android:layout_marginTop="@dimen/base_text_end_margin"
-         android:layout_marginStart="@dimen/base_text_start_margin"
-         android:textColor="@color/yellow"
-         android:textSize="@dimen/base_text_size"
-         android:text="@string/FUNCT1" />
-    
-    <EditText
-         android:id="@+id/functionText1"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/graphType"
-         android:layout_toEndOf="@+id/yTextView1"
-         android:layout_marginTop="@dimen/base_text_top_margin"
-         android:layout_marginEnd="@dimen/base_text_end_margin"
-         android:background="@color/white"
-         android:ems="10"
-         android:textSize="@dimen/base_text_size"
-         android:gravity="top|start"
-         android:inputType="textNoSuggestions"
-         android:scrollbars="vertical"
-         android:textColor="@color/black"
-         android:textCursorDrawable="@drawable/color_cursor" />
-    
-    <TextView
-         android:id="@+id/yTextView2"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/yTextView1"
-         android:layout_marginTop="@dimen/base_text_top_margin"
-         android:layout_marginStart="@dimen/base_text_start_margin"
-         android:textColor="@color/yellow"
-         android:textSize="@dimen/base_text_size"
-         android:text="@string/FUNCT2" />
-    
-    <EditText
-         android:id="@+id/functionText2"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/functionText1"
-         android:layout_toEndOf="@+id/yTextView2"
-         android:layout_marginTop="@dimen/base_text_top_margin"
-         android:layout_marginEnd="@dimen/base_text_end_margin"
-         android:background="@color/white"
-         android:ems="10"
-         android:textSize="@dimen/base_text_size"
-         android:gravity="top|start"
-         android:inputType="textNoSuggestions"
-         android:scrollbars="vertical"
-         android:textColor="@color/black"
-         android:textCursorDrawable="@drawable/color_cursor" />
+        android:layout_below="@+id/functionSaveAs">
+
+        <Spinner
+            android:id="@+id/graphType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:entries="@array/graph_type_list"
+            android:prompt="@string/graph_type_prompt"
+            android:textSize="@dimen/base_text_size"
+            android:background="@color/amber_1"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+	<RelativeLayout
+        android:id="@+id/function1"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+        android:layout_below="@+id/graphTypeContainer">
+
+		<TextView
+			 android:id="@+id/yTextView1"
+			 android:layout_width="wrap_content"
+			 android:layout_height="wrap_content"
+			 android:layout_marginTop="@dimen/base_text_end_margin"
+			 android:layout_marginStart="@dimen/base_text_start_margin"
+			 android:textColor="@color/yellow"
+			 android:textSize="@dimen/base_text_size"
+			 android:text="@string/FUNCT1" />
+
+		<EditText
+			 android:id="@+id/functionText1"
+			 android:layout_width="match_parent"
+			 android:layout_height="wrap_content"
+			 android:layout_toEndOf="@+id/yTextView1"
+			 android:layout_marginTop="@dimen/base_text_top_margin"
+			 android:layout_marginEnd="@dimen/base_text_end_margin"
+			 android:background="@color/white"
+			 android:ems="10"
+			 android:textSize="@dimen/base_text_size"
+			 android:gravity="top|start"
+			 android:inputType="textNoSuggestions"
+			 android:scrollbars="vertical"
+			 android:textColor="@color/black"
+			 android:textCursorDrawable="@drawable/color_cursor" />
+
+	</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/function2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/function1">
+
+        <TextView
+             android:id="@+id/yTextView2"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="@dimen/base_text_top_margin"
+             android:layout_marginStart="@dimen/base_text_start_margin"
+             android:textColor="@color/yellow"
+             android:textSize="@dimen/base_text_size"
+             android:text="@string/FUNCT2" />
+
+        <EditText
+             android:id="@+id/functionText2"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_toEndOf="@+id/yTextView2"
+             android:layout_marginTop="@dimen/base_text_top_margin"
+             android:layout_marginEnd="@dimen/base_text_end_margin"
+             android:background="@color/white"
+             android:ems="10"
+             android:textSize="@dimen/base_text_size"
+             android:gravity="top|start"
+             android:inputType="textNoSuggestions"
+             android:scrollbars="vertical"
+             android:textColor="@color/black"
+             android:textCursorDrawable="@drawable/color_cursor" />
+
+    </RelativeLayout>
       
     <View
     	android:id="@+id/separator2"
        	android:background="@color/amber_1"
        	android:layout_width="fill_parent" 
         android:layout_height="2.0dip"
-        android:layout_below="@+id/functionText2"
+        android:layout_below="@+id/function2"
         android:layout_marginTop="@dimen/base_text_top_margin" />
       
 	<com.bstech.calclab.view.GraphView

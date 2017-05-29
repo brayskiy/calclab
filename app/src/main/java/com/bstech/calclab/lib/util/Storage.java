@@ -20,27 +20,13 @@ public class Storage
     public static void write(final String file, final String data)
     { 
         try {
-            if ((file == null) || (data == null))
-            {
-                Log.w("Nothing to write");
-                return;
-            }
-            
-            Log.d("file = " + file + ", data = " + data);
-            
             FileOutputStream fos = m_context.openFileOutput(file, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(data);
             oos.close();
         }
-        catch (java.io.FileNotFoundException e)
-        {
-            Log.e("" + e);
-        }
-        catch (java.io.IOException e)
-        {
-            Log.e("" + e);
-        }
+        catch (java.io.FileNotFoundException e) { Log.e("" + e); }
+        catch (java.io.IOException e) { Log.e("" + e); }
     }
     
     
@@ -54,21 +40,10 @@ public class Storage
             ObjectInputStream ois  = new ObjectInputStream(fis);
             
             data = (String)ois.readObject();
-            
-            Log.d(data);
         }
-        catch (java.io.FileNotFoundException e)
-        {
-            Log.e("" + e);
-        }
-        catch (java.io.IOException e)
-        {
-            Log.e("" + e);
-        }
-        catch (ClassNotFoundException e)
-        {
-            Log.e("" + e);
-        }
+        catch (java.io.FileNotFoundException e) { Log.e("" + e); }
+        catch (java.io.IOException e) { Log.e("" + e); }
+        catch (ClassNotFoundException e) { Log.e("" + e); }
         
         return data;
     }

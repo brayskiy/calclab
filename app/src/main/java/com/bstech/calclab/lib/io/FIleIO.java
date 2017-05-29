@@ -9,41 +9,34 @@ import java.io.IOException;
 import com.bstech.calclab.lib.log.Log;
 
 
-public class FIleIO
-{
-    public static String read(final File file)
-    {        
-        try
-        {
+public class FIleIO {
+    public static String read(final File file) {
+        String retData = null;
+
+        try {
             FileInputStream is   = new FileInputStream(file);
         
             int size = is.available();
             byte [] contents = new byte[size];
             int got = is.read(contents);
-            if (got == size)
-            {
+            if (got == size) {
                 is.close();
-                return new String(contents);
+                retData = new String(contents);
             }
-            else
-            {
+            else {
                 is.close();
-                Log.e("FileIO.read", "Error file reading: " + file.getPath());
-                return null;
+                Log.e("Error file reading: " + file.getPath());
             }
         }
-        catch (Exception e) 
-        {
-            Log.e("FileIO.read", "Exception");
-        }
-        return null;
+        catch (IOException e) { Log.e("" + e); }
+        catch (Exception e) { Log.e("" + e); }
+
+        return retData;
     }
     
     
-    public static boolean write(final File file, final String data)
-    {        
-        try
-        {
+    public static boolean write(final File file, final String data) {
+        try {
             FileOutputStream os = new FileOutputStream(file);
             
             byte [] buffer = data.getBytes();
@@ -51,10 +44,9 @@ public class FIleIO
             os.close();
             return true;
         }
-        catch (IOException e) 
-        {
-            Log.e("FileIO.write", "Exception");
-            return false;
-        }
+        catch (IOException e) { Log.e("" + e); }
+        catch (Exception e) { Log.e("" + e); }
+
+        return false;
     }
 } // class FileIO

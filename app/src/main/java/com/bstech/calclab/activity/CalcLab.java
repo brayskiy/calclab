@@ -1,5 +1,6 @@
 package com.bstech.calclab.activity;
 
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import android.annotation.SuppressLint;
@@ -21,6 +22,7 @@ import com.bstech.calclab.fragment.BoascriptFragment;
 import com.bstech.calclab.fragment.DummyFragment;
 import com.bstech.calclab.fragment.GraphFragment;
 import com.bstech.calclab.lib.log.Log;
+import com.bstech.calclab.models.GraphData;
 
 public class CalcLab extends FragmentActivity
 {
@@ -37,12 +39,15 @@ public class CalcLab extends FragmentActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         
         GlobalData.mainActivity = CalcLab.this;
         GlobalData.context      = this;
         GlobalData.res          = this.getResources();
+
+        loadFont();
+
+        GraphData.init(this);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
@@ -185,6 +190,26 @@ public class CalcLab extends FragmentActivity
     public void onBackPressed()
     {
 
+    }
+
+    private void loadFont() {
+        try {
+            InputStream is = getResources().openRawResource(R.raw.plxtnd5);
+            int size = is.available();
+            byte [] contents = new byte[size];
+            int got = is.read(contents);
+            if (got == size) {
+                FileOutputStream fos = openFileOutput("plxtnd5.fnt", Context.MODE_PRIVATE);
+                fos.write(contents);
+                fos.close();
+
+                Log.d("size = " + size);
+            }
+            else {
+                Log.e("Error file reading");
+            }
+        }
+        catch (Exception e) {Log.e("" + e); }
     }
         
 } // class Calclab
