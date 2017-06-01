@@ -1,6 +1,8 @@
 package com.bstech.calclab.activity;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import android.annotation.SuppressLint;
@@ -185,31 +187,24 @@ public class CalcLab extends FragmentActivity
         return false;
     }
 
-    
     @Override
-    public void onBackPressed()
-    {
-
+    public void onBackPressed() {
     }
 
     private void loadFont() {
         try {
             InputStream is = getResources().openRawResource(R.raw.plxtnd5);
-            int size = is.available();
-            byte [] contents = new byte[size];
-            int got = is.read(contents);
-            if (got == size) {
-                FileOutputStream fos = openFileOutput("plxtnd5.fnt", Context.MODE_PRIVATE);
+            FileOutputStream fos = openFileOutput("plxtnd5.fnt", Context.MODE_PRIVATE);
+            byte [] contents = new byte[4 * 1024];
+            while (is.read(contents) > 0) {
                 fos.write(contents);
-                fos.close();
-
-                Log.d("size = " + size);
             }
-            else {
-                Log.e("Error file reading");
-            }
+            is.close();
+            fos.close();
         }
+        catch (FileNotFoundException e) {Log.e("" + e); }
+        catch (IOException e) {Log.e("" + e); }
         catch (Exception e) {Log.e("" + e); }
     }
         
-} // class Calclab
+} // class CalcLab
